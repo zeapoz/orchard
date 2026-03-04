@@ -54,8 +54,10 @@ impl Nullifier {
         rho: pallas::Base,
         psi: pallas::Base,
         cm: NoteCommitment,
+        domain_prefix: &str,
+        value: &[u8]
     ) -> Self {
-        let k = pallas::Point::hash_to_curve("z.cash:Orchard")(b"K");
+        let k = pallas::Point::hash_to_curve(domain_prefix)(value);
 
         Nullifier(extract_p(&(k * mod_r_p(nk.prf_nf(rho) + psi) + cm.0)))
     }

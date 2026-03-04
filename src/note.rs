@@ -54,7 +54,8 @@ impl Rho {
         Rho(nf.0)
     }
 
-    pub(crate) fn into_inner(self) -> pallas::Base {
+    /// Returns the underlying field element.
+    pub fn into_inner(self) -> pallas::Base {
         self.0
     }
 }
@@ -92,7 +93,7 @@ impl RandomSeed {
     /// Defined in [Zcash Protocol Spec § 4.7.3: Sending Notes (Orchard)][orchardsend].
     ///
     /// [orchardsend]: https://zips.z.cash/protocol/nu5.pdf#orchardsend
-    pub(crate) fn psi(&self, rho: &Rho) -> pallas::Base {
+    pub fn psi(&self, rho: &Rho) -> pallas::Base {
         to_base(PrfExpand::PSI.with(&self.0, &rho.to_bytes()))
     }
 
@@ -120,6 +121,11 @@ impl RandomSeed {
         commitment::NoteCommitTrapdoor(to_scalar(
             PrfExpand::ORCHARD_RCM.with(&self.0, &rho.to_bytes()),
         ))
+    }
+
+    /// Returns the scalar used as note commitment trapdoor for this seed and rho.
+    pub fn rcm_scalar(&self, rho: &Rho) -> pallas::Scalar {
+        self.rcm(rho).inner()
     }
 }
 
@@ -287,6 +293,21 @@ impl Note {
             self.rho.0,
             self.rseed.psi(&self.rho),
             self.commitment(),
+            "z.cash:Orchard",
+            b"K",
+        )
+    }
+
+    /// A nullifier that will be derived from the note, but it will never
+    /// appear in a transaction.
+    pub fn hiding_nullifier(&self, fvk: &FullViewingKey, domain: &str, value: &[u8]) -> Nullifier {
+        Nullifier::derive(
+            fvk.nk(),
+            self.rho.0,
+            self.rseed.psi(&self.rho),
+            self.commitment(),
+            domain,
+            value,
         )
     }
 }

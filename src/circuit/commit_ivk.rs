@@ -27,7 +27,8 @@ pub struct CommitIvkChip {
 }
 
 impl CommitIvkChip {
-    pub(in crate::circuit) fn configure(
+    #[allow(missing_docs)]
+    pub fn configure(
         meta: &mut ConstraintSystem<pallas::Base>,
         advices: [Column<Advice>; 10],
     ) -> CommitIvkConfig {
@@ -222,12 +223,14 @@ impl CommitIvkChip {
         config
     }
 
-    pub(in crate::circuit) fn construct(config: CommitIvkConfig) -> Self {
+    #[allow(missing_docs)]
+    pub fn construct(config: CommitIvkConfig) -> Self {
         Self { config }
     }
 }
 
-pub(in crate::circuit) mod gadgets {
+#[allow(missing_docs)]
+pub mod gadgets {
     use halo2_gadgets::utilities::{lookup_range_check::LookupRangeCheckConfig, RangeConstrained};
     use halo2_proofs::circuit::Chip;
 
@@ -238,7 +241,7 @@ pub(in crate::circuit) mod gadgets {
     /// [Section 5.4.8.4 Sinsemilla commitments]: https://zips.z.cash/protocol/protocol.pdf#concretesinsemillacommit
     #[allow(non_snake_case)]
     #[allow(clippy::type_complexity)]
-    pub(in crate::circuit) fn commit_ivk(
+    pub fn commit_ivk(
         sinsemilla_chip: SinsemillaChip<
             OrchardHashDomains,
             OrchardCommitDomains,

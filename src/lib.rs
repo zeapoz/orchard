@@ -48,6 +48,15 @@ mod test_vectors;
 pub use action::Action;
 pub use address::Address;
 pub use bundle::Bundle;
+/// Orchard fixed-base selector used by circuit scalar multiplication gadgets.
+pub type OrchardFixedBases = constants::fixed_bases::OrchardFixedBases;
+/// Orchard full-width fixed bases used by circuit scalar multiplication gadgets.
+pub type OrchardFixedBasesFull = constants::fixed_bases::OrchardFixedBasesFull;
+pub use constants::fixed_bases::{NullifierK, ValueCommitV};
+/// Orchard Sinsemilla hash domains.
+pub type OrchardHashDomains = constants::sinsemilla::OrchardHashDomains;
+/// Orchard Sinsemilla commit domains.
+pub type OrchardCommitDomains = constants::sinsemilla::OrchardCommitDomains;
 pub use constants::MERKLE_DEPTH_ORCHARD as NOTE_COMMITMENT_TREE_DEPTH;
 pub use note::Note;
 pub use tree::Anchor;
